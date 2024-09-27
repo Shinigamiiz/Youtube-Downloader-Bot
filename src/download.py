@@ -1,6 +1,6 @@
 import src.keyboards as kb
 
-from aiogram import Router, F, types
+from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery, FSInputFile
 
 import asyncio
@@ -27,25 +27,29 @@ async def getLink(message: Message):
         await message.reply("Это не ссылка youtube")
 
 
-@rt.callback_query(F.data == "1080")
-async def dw_1080(callback: CallbackQuery):
-    await callback.message.answer("...")
+@rt.callback_query(F.data == "720")
+async def dw_720(callback: CallbackQuery):
+    await callback.message.answer("Идёт устоновка")
 
     options = {
         'skip-download': True,
-        'format_sort': ['res:1080', 'ext:mp4:m4a'],
+        'format_sort': ['res:720', 'ext:mp4:m4a'],
         'outtmpl': 'output/video/%(title)s.%(ext)s'
     }
 
-    with ytd.YoutubeDL(options) as ytdl:
-        ytdl.download([link])
-        result = ytdl.extract_info("{}".format(link))
-        title = ytdl.prepare_filename(result)
-        video = open(f'{title}', 'rb')
+    try:
+        with ytd.YoutubeDL(options) as ytdl:
+            ytdl.download([link])
+            result = ytdl.extract_info("{}".format(link))
+            name = result.get("title")
+            title = ytdl.prepare_filename(result)
+            video = open(f'{title}', 'rb')
 
-        await callback.message.answer_video(FSInputFile(path=video.name))
+        await callback.message.answer("Отпровляю файл...")
+        await callback.message.answer_video(FSInputFile(path=video.name), caption=name)
 
         folder = 'output/video/'
+
         for filename in os.listdir(folder):
             file_path = os.path.join(folder, filename)
             try:
@@ -56,27 +60,10 @@ async def dw_1080(callback: CallbackQuery):
 
             except Exception as e:
                 print('Error %s. Reason: %s' % (file_path, e))
-
-
-@rt.callback_query(F.data == "720")
-async def dw_720(callback: CallbackQuery):
-    await callback.message.answer("...")
-    options = {
-        'skip-download': True,
-        'format_sort': ['res:720', 'ext:mp4:m4a'],
-        'outtmpl': 'output/video/%(title)s.%(ext)s'
-    }
-
-    with ytd.YoutubeDL(options) as ytdl:
-        ytdl.download([link])
-        result = ytdl.extract_info("{}".format(link))
-        title = ytdl.prepare_filename(result)
-        video = open(f'{title}', 'rb')
-
-        await callback.message.answer_video(FSInputFile(path=video.name))
+    except:
+        await callback.message.answer("Не удалось отправить файл")
 
         folder = 'output/video/'
-
         for filename in os.listdir(folder):
             file_path = os.path.join(folder, filename)
             try:
@@ -91,7 +78,7 @@ async def dw_720(callback: CallbackQuery):
 
 @rt.callback_query(F.data == "360")
 async def dw_360(callback: CallbackQuery):
-    await callback.message.answer("...")
+    await callback.message.answer("Идёт устоновка")
 
     options = {
         'skip-download': True,
@@ -99,14 +86,31 @@ async def dw_360(callback: CallbackQuery):
         'outtmpl': 'output/video/%(title)s.%(ext)s'
     }
 
-    with ytd.YoutubeDL(options) as ytdl:
-        ytdl.download([link])
-        result = ytdl.extract_info("{}".format(link))
-        title = ytdl.prepare_filename(result)
-        video = open(f"{title}", 'rb')
+    try:
+        with ytd.YoutubeDL(options) as ytdl:
+            ytdl.download([link])
+            result = ytdl.extract_info("{}".format(link))
+            name = result.get("title")
+            title = ytdl.prepare_filename(result)
+            video = open(f"{title}", 'rb')
 
-        await callback.message.answer_video(FSInputFile(path=video.name))
+        await callback.message.answer("Отпровляю файл...")
+        await callback.message.answer_video(FSInputFile(path=video.name), caption=name)
 
+        folder = 'output/video/'
+
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+
+            except Exception as e:
+                print('Error %s. Reason: %s' % (file_path, e))
+    except:
+        await callback.message.answer("Не удалось отпарвить файл")
         folder = 'output/video/'
 
         for filename in os.listdir(folder):
@@ -123,7 +127,7 @@ async def dw_360(callback: CallbackQuery):
 
 @rt.callback_query(F.data == "mp3")
 async def dw_mp3(callback: CallbackQuery):
-    await callback.message.answer("...")
+    await callback.message.answer("Идёт устоновка")
 
     options = {
         'skip-download': True,
@@ -136,31 +140,49 @@ async def dw_mp3(callback: CallbackQuery):
         }],
     }
 
-    with ytd.YoutubeDL(options) as ytdl:
-        ytdl.download([link])
-        result = ytdl.extract_info("{}".format(link))
-        title = ytdl.prepare_filename(result)
-        clean_title = title.replace(".m4a", "")
-        audio = open(f'{clean_title}.mp3', 'rb')
+    try:
+        with ytd.YoutubeDL(options) as ytdl:
+            ytdl.download([link])
+            result = ytdl.extract_info("{}".format(link))
+            name = result.get("title")
+            title = ytdl.prepare_filename(result)
+            clean_title = title.replace(".m4a", "")
+            audio = open(f'{clean_title}.mp3', 'rb')
 
-        await callback.message.answer_audio(FSInputFile(path=audio.name))
+        await callback.message.answer("Отпровляю файл...")
+        await callback.message.answer_audio(FSInputFile(path=audio.name), caption=name)
 
-    folder = 'output/mp3/'
+        folder = 'output/mp3/'
 
-    for filename in os.listdir(folder):
-        file_path = os.path.join(folder, filename)
-        try:
-            if os.path.isfile(file_path) or os.path.islink(file_path):
-                os.unlink(file_path)
-            elif os.path.isdir(file_path):
-                shutil.rmtree(file_path)
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
 
-        except Exception as e:
-            print('Error %s. Reason: %s' % (file_path, e))
+            except Exception as e:
+                print('Error %s. Reason: %s' % (file_path, e))
+    except:
+        await callback.message.answer("Не удалось отпарвить файл")
+        folder = 'output/video/'
+
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+
+            except Exception as e:
+                print('Error %s. Reason: %s' % (file_path, e))
 
 
 @rt.callback_query(F.data == "jpg")
 async def dw_jpg(callback: CallbackQuery):
+    await callback.message.answer("Идёт устоновка")
 
     with ytd.YoutubeDL({}) as ytdl:
         info_dict = ytdl.extract_info(link, download=False)
@@ -170,6 +192,7 @@ async def dw_jpg(callback: CallbackQuery):
 
     wget.download(thumbnail, out="output/jpg/thumb.jpg")
 
+    await callback.message.answer("Отпровляю файл...")
     await callback.message.answer_document(FSInputFile(path="output/jpg/thumb.jpg"))
 
     folder = 'output/jpg/'
