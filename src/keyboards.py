@@ -1,12 +1,8 @@
-from aiogram.types import (ReplyKeyboardMarkup, KeyboardButton, 
-                            InlineKeyboardMarkup, InlineKeyboardButton)
+from aiogram.types import (ReplyKeyboardMarkup, KeyboardButton,
+                           InlineKeyboardMarkup, InlineKeyboardButton)
 
-main = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Install")]], resize_keyboard=True)
-
-
-gitBtn = InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text="Github", url="https://github.com/ZeroNiki/Youtube-Downloader-Bot/")]
-])
+main = ReplyKeyboardMarkup(
+    keyboard=[[KeyboardButton(text="Что мне делать?")]], resize_keyboard=True)
 
 
 chBtn = InlineKeyboardMarkup(inline_keyboard=[

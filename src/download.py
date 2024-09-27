@@ -2,23 +2,29 @@ import src.keyboards as kb
 
 from aiogram import Router, F, types
 from aiogram.types import Message, CallbackQuery, FSInputFile
-# from aiogram.methods import SendVideo, SendAudio, SendPhoto
 
+import asyncio
 import yt_dlp as ytd
 import wget
 import os
 import shutil
+import re
 
 rt = Router()
+
+YOUTUBELINK = r'^(https?\:\/\/)?(www\.youtube\.com|youtu\.be)\/.+$'
 
 
 @rt.message(F.text)
 async def getLink(message: Message):
-    global link
-    link = message.text
+    if re.match(YOUTUBELINK, message.text):
+        global link
+        link = message.text
 
-    await message.answer(message.text, reply_markup=kb.chBtn)
-    await message.delete()
+        await message.answer(message.text, reply_markup=kb.chBtn)
+        await message.delete()
+    else:
+        await message.reply("Это не ссылка youtube")
 
 
 @rt.callback_query(F.data == "1080")
@@ -133,8 +139,9 @@ async def dw_mp3(callback: CallbackQuery):
     with ytd.YoutubeDL(options) as ytdl:
         ytdl.download([link])
         result = ytdl.extract_info("{}".format(link))
-        title = ytdl.prepare_filename(result)[:-5]
-        audio = open(f'{title}.mp3', 'rb')
+        title = ytdl.prepare_filename(result)
+        clean_title = title.replace(".m4a", "")
+        audio = open(f'{clean_title}.mp3', 'rb')
 
         await callback.message.answer_audio(FSInputFile(path=audio.name))
 
@@ -154,7 +161,6 @@ async def dw_mp3(callback: CallbackQuery):
 
 @rt.callback_query(F.data == "jpg")
 async def dw_jpg(callback: CallbackQuery):
-    await callback.message.answer("...")
 
     with ytd.YoutubeDL({}) as ytdl:
         info_dict = ytdl.extract_info(link, download=False)
@@ -164,7 +170,7 @@ async def dw_jpg(callback: CallbackQuery):
 
     wget.download(thumbnail, out="output/jpg/thumb.jpg")
 
-    await callback.message.answer_photo(FSInputFile(path="output/jpg/thumb.jpg"))
+    await callback.message.answer_document(FSInputFile(path="output/jpg/thumb.jpg"))
 
     folder = 'output/jpg/'
 
