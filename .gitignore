@@ -10,7 +10,6 @@ __pycache__/
 
 # Environments
 src/.env
-.env
 .venv/
 venv/
 ENV/
