@@ -10,8 +10,8 @@ pipeline {
         stage('Build') {
             steps {
                 git branch: 'main', url: 'https://github.com/DevOlabodeM/pytest-intro-vs-M'
-                sh 'rm .env'
                 sh 'touch .env'
+                sh 'rm .env'
                 sh 'echo "TOKEN=6029591492:AAGpbHWKlTCYegMipoNqBHkfi6YhCWo2UYQ" >> .env'
                 sh 'echo "ADMIN=664884438" >> .env'
                 sh 'python3 -m venv venv'
