@@ -9,7 +9,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                git branch: 'main', url: 'https://github.com/DevOlabodeM/pytest-intro-vs-M'
+                git branch: 'main', credentialsId: 'YTD-ssh', url: 'git@github.com:ZeroNiki/Youtube-Downloader-Bot.git'
                 sh 'touch .env'
                 sh 'rm .env'
                 sh 'echo "TOKEN=6029591492:AAGpbHWKlTCYegMipoNqBHkfi6YhCWo2UYQ" >> .env'
