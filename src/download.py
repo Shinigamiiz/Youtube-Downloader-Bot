@@ -29,7 +29,7 @@ async def getLink(message: Message):
 
 @rt.callback_query(F.data == "720")
 async def dw_720(callback: CallbackQuery):
-    await callback.message.answer("Идёт устоновка")
+    await callback.message.answer("Идёт установка")
 
     options = {
         'skip-download': True,
@@ -45,7 +45,7 @@ async def dw_720(callback: CallbackQuery):
             title = ytdl.prepare_filename(result)
             video = open(f'{title}', 'rb')
 
-        await callback.message.answer("Отпровляю файл...")
+        await callback.message.answer("Отправляю файл...")
         await callback.message.answer_video(FSInputFile(path=video.name), caption=name)
 
         folder = 'output/video/'
@@ -78,7 +78,7 @@ async def dw_720(callback: CallbackQuery):
 
 @rt.callback_query(F.data == "360")
 async def dw_360(callback: CallbackQuery):
-    await callback.message.answer("Идёт устоновка")
+    await callback.message.answer("Идёт установка")
 
     options = {
         'skip-download': True,
@@ -94,7 +94,7 @@ async def dw_360(callback: CallbackQuery):
             title = ytdl.prepare_filename(result)
             video = open(f"{title}", 'rb')
 
-        await callback.message.answer("Отпровляю файл...")
+        await callback.message.answer("Отправляю файл...")
         await callback.message.answer_video(FSInputFile(path=video.name), caption=name)
 
         folder = 'output/video/'
@@ -110,7 +110,7 @@ async def dw_360(callback: CallbackQuery):
             except Exception as e:
                 print('Error %s. Reason: %s' % (file_path, e))
     except:
-        await callback.message.answer("Не удалось отпарвить файл")
+        await callback.message.answer("Не удалось отправить файл")
         folder = 'output/video/'
 
         for filename in os.listdir(folder):
@@ -127,7 +127,7 @@ async def dw_360(callback: CallbackQuery):
 
 @rt.callback_query(F.data == "mp3")
 async def dw_mp3(callback: CallbackQuery):
-    await callback.message.answer("Идёт устоновка")
+    await callback.message.answer("Идёт установка")
 
     options = {
         'skip-download': True,
@@ -149,7 +149,7 @@ async def dw_mp3(callback: CallbackQuery):
             clean_title = title.replace(".m4a", "")
             audio = open(f'{clean_title}.mp3', 'rb')
 
-        await callback.message.answer("Отпровляю файл...")
+        await callback.message.answer("Отправляю файл...")
         await callback.message.answer_audio(FSInputFile(path=audio.name), caption=name)
 
         folder = 'output/mp3/'
@@ -165,7 +165,7 @@ async def dw_mp3(callback: CallbackQuery):
             except Exception as e:
                 print('Error %s. Reason: %s' % (file_path, e))
     except:
-        await callback.message.answer("Не удалось отпарвить файл")
+        await callback.message.answer("Не удалось отправить файл")
         folder = 'output/video/'
 
         for filename in os.listdir(folder):
@@ -182,7 +182,7 @@ async def dw_mp3(callback: CallbackQuery):
 
 @rt.callback_query(F.data == "jpg")
 async def dw_jpg(callback: CallbackQuery):
-    await callback.message.answer("Идёт устоновка")
+    await callback.message.answer("Идёт установка")
 
     with ytd.YoutubeDL({}) as ytdl:
         info_dict = ytdl.extract_info(link, download=False)
@@ -192,7 +192,7 @@ async def dw_jpg(callback: CallbackQuery):
 
     wget.download(thumbnail, out="output/jpg/thumb.jpg")
 
-    await callback.message.answer("Отпровляю файл...")
+    await callback.message.answer("Отправляю файл...")
     await callback.message.answer_document(FSInputFile(path="output/jpg/thumb.jpg"))
 
     folder = 'output/jpg/'
