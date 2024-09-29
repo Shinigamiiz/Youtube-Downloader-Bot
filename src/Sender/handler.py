@@ -101,7 +101,7 @@ async def process_send_broadcast(callback_query: CallbackQuery, state: FSMContex
             logging.error(
                 f"Не удалось отправить сообщение пользователю {users_id}: {e}")
 
-    await bot.send_message(users_id, f"Сообщение отправлено {len(db.get_all_users())}")
+    await bot.send_message(ADMIN, f"Сообщение отправлено {len(db.get_all_users())}")
     await state.clear()
 
 
