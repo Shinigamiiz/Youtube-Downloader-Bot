@@ -23,7 +23,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh 'nohup python main.py > logfile.log &2>&1 &'
+                sh 'nohup python3 main.py > logfile.log &2>&1 &'
             }
         }
     }
