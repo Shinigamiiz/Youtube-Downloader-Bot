@@ -4,4 +4,4 @@ import os
 load_dotenv()
 
 TOKEN = os.getenv("TOKEN")
-ADMIN = os.getenv("ADMIN")
+ADMIN = int(os.getenv("ADMIN"))

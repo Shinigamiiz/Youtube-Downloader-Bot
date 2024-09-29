@@ -27,7 +27,7 @@ service = UserService(db)
 
 @rt.message(Command("sender"))
 async def start_broadcast(message: Message, state: FSMContext):
-    if service.is_admin(message.from_user.id):
+    if not service.is_admin(message.from_user.id):
         await message.reply("Эта команда доступна только администраторам.")
         return
 

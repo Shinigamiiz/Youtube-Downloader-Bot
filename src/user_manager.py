@@ -7,6 +7,10 @@ class UserService:
         self.db = db
 
     def is_admin(self, user_id):
+        print(user_id)
+        print(ADMIN)
+        print(f"user_id: {user_id} ({type(user_id)})")
+        print(f"ADMIN: {ADMIN} ({type(ADMIN)})")
         return user_id == ADMIN
 
     def if_user_exist(self, user_id):
