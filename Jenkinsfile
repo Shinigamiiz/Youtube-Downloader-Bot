@@ -12,17 +12,18 @@ pipeline {
                 git branch: 'main', credentialsId: 'YTD-ssh', url: 'git@github.com:ZeroNiki/Youtube-Downloader-Bot.git'
                 sh 'touch .env'
                 sh 'rm .env'
+                sh 'mkdir -p output/video output/mp3 output/jpg'
+                sh 'ls -ld /var/lib/YTD-db/'
                 sh 'echo "TOKEN=6029591492:AAGpbHWKlTCYegMipoNqBHkfi6YhCWo2UYQ" >> .env'
                 sh 'echo "ADMIN=664884438" >> .env'
                 sh 'python3 -m venv venv'
                 sh '. venv/bin/activate'
                 sh 'pip install -r requirements.txt'
-                sh 'python3 main.py > logfile.log &2>&1 &'
             }
         }
-        stage('Run') {
+        stage('Deploy') {
             steps {
-                sh 'nohup python3 main.py > logfile.log &2>&1 &'
+                sh 'nohup python main.py > logfile.log &2>&1 &'
             }
         }
     }

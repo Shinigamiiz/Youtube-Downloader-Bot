@@ -1,9 +1,16 @@
 import sqlite3
+import os
 
 
 class Database:
-    def __init__(self, db_file="users.db"):
-        self.db_file = db_file
+    def __init__(self, db_file=None):
+        if db_file is None:
+            db_dir = "/var/lib/YTD-db/"
+            os.makedirs(db_dir, exist_ok=True)
+            self.db_file = os.path.join(db_dir, "users.db")
+        else:
+            self.db_file = db_file
+
         self.create_table()
 
     def create_connection(self):
