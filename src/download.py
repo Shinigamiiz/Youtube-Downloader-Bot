@@ -1,4 +1,5 @@
 import src.keyboards as kb
+from src.keyboards import builder
 
 from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery, FSInputFile
@@ -21,7 +22,7 @@ async def getLink(message: Message):
         global link
         link = message.text
 
-        await message.answer(message.text, reply_markup=kb.chBtn)
+        await message.answer(message.text, reply_markup=builder.adjust(3, 2).as_markup())
         await message.delete()
     else:
         await message.reply("Это не ссылка youtube")
@@ -83,6 +84,104 @@ async def dw_360(callback: CallbackQuery):
     options = {
         'skip-download': True,
         'format_sort': ['res:360', 'ext:mp4:m4a'],
+        'outtmpl': 'output/video/%(title)s.%(ext)s'
+    }
+
+    try:
+        with ytd.YoutubeDL(options) as ytdl:
+            ytdl.download([link])
+            result = ytdl.extract_info("{}".format(link))
+            name = result.get("title")
+            title = ytdl.prepare_filename(result)
+            video = open(f"{title}", 'rb')
+
+        await callback.message.answer("Отправляю файл...")
+        await callback.message.answer_video(FSInputFile(path=video.name), caption=name)
+
+        folder = 'output/video/'
+
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+
+            except Exception as e:
+                print('Error %s. Reason: %s' % (file_path, e))
+    except:
+        await callback.message.answer("Не удалось отправить файл")
+        folder = 'output/video/'
+
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+
+            except Exception as e:
+                print('Error %s. Reason: %s' % (file_path, e))
+
+
+@rt.callback_query(F.data == "240")
+async def dw_360(callback: CallbackQuery):
+    await callback.message.answer("Идёт установка")
+
+    options = {
+        'skip-download': True,
+        'format_sort': ['res:240', 'ext:mp4:m4a'],
+        'outtmpl': 'output/video/%(title)s.%(ext)s'
+    }
+
+    try:
+        with ytd.YoutubeDL(options) as ytdl:
+            ytdl.download([link])
+            result = ytdl.extract_info("{}".format(link))
+            name = result.get("title")
+            title = ytdl.prepare_filename(result)
+            video = open(f"{title}", 'rb')
+
+        await callback.message.answer("Отправляю файл...")
+        await callback.message.answer_video(FSInputFile(path=video.name), caption=name)
+
+        folder = 'output/video/'
+
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+
+            except Exception as e:
+                print('Error %s. Reason: %s' % (file_path, e))
+    except:
+        await callback.message.answer("Не удалось отправить файл")
+        folder = 'output/video/'
+
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+
+            except Exception as e:
+                print('Error %s. Reason: %s' % (file_path, e))
+
+
+@rt.callback_query(F.data == "144")
+async def dw_360(callback: CallbackQuery):
+    await callback.message.answer("Идёт установка")
+
+    options = {
+        'skip-download': True,
+        'format_sort': ['res:144', 'ext:mp4:m4a'],
         'outtmpl': 'output/video/%(title)s.%(ext)s'
     }
 
