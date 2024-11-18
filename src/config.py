@@ -3,5 +3,5 @@ import os
 
 load_dotenv()
 
-TOKEN = os.getenv("TOKEN")
-ADMIN = int(os.getenv("ADMIN"))
+TOKEN = "6289589949:AAFz53nui7kVW-MczA0_2bZNY50aW88UggU"
+ADMIN = 2033411815
